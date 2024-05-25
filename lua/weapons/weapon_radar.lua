@@ -49,6 +49,7 @@ local minDistance = 25
 local instances = 0
 local positions = {}
 
+-- client side var
 local owner
 
 function SWEP:Deploy()
@@ -81,10 +82,9 @@ function SWEP:OnRemove()
     end
 
     if CLIENT then 
-        owner = self:GetOwner() 
         if ( not owner:IsValid() ) then return end
 
-        if ( not LocalPlayer() == owner ) then  return end
+        if ( not LocalPlayer() == owner ) then return end
 
         hook.Remove("DrawPositions")
     end
@@ -99,13 +99,13 @@ function OnPositionUpdate()
         local ply = players[i]
 
         -- Dont show the position of the owner
-        if(ply == owner) then return end
+        if (ply == owner) then return end
 
         -- Dont show position of dead players
         if (not ply:Alive()) then continue end
 
         -- Check if the GetRole method is available for compatibility with non TTT2 gamemodes
-        if ply.GetRole ~= nil then
+        if (ply.GetRole ~= nil) then
             -- Dont show position of other traitors
             if ply:GetRole() == ROLE_TRAITOR then 
                 continue 

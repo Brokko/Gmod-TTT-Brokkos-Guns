@@ -14,7 +14,7 @@ if CLIENT then
         desc = "Stop da Ball"
     };
 
-    SWEP.Icon = "vgui/ttt/icon_armor_ball.png"
+    SWEP.Icon = "vgui/ttt/icon_thrower_radio.png"
 end
 
 SWEP.Kind                  = WEAPON_PISTOL
