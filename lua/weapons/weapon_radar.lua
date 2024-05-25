@@ -51,26 +51,27 @@ local positions = {}
 
 local owner
 
-function SWEP:Initialize()
+function SWEP:Deploy()
     -- Keep track of existing instances
     instances = instances +  1
 
     -- Inititate timer only if no other instance is already active
     if(instances == 1) then
         timer.Create("UpdatePositions", updateCooldown, 0, OnPositionUpdate)
+
+        -- Initiate first update
+        OnPositionUpdate()
     end
 
     -- Hook is only added on weapon owners client, so the HUD is only updated on his client
     if CLIENT then
-        -- Set on client side only, so every client has a referance to weapon owner
         owner = self:GetOwner() 
-        if(not owner:IsValid()) then return end
+        if( not owner:IsValid() ) then return end
 
-        hook.Add("HUDPaint", "DrawPositions", OnUpdateHUD)
+        if ( not LocalPlayer() == owner ) then return end
+
+        hook.Add("HUDPaint", "DrawPositions", OnUpdateHUD) 
     end
-
-    -- Initiate first update
-    OnPositionUpdate()
 end
 
 function SWEP:OnRemove()
@@ -79,7 +80,14 @@ function SWEP:OnRemove()
         timer.Remove("UpdatePositions")
     end
 
-    hook.Remove("DrawPositions")
+    if CLIENT then 
+        owner = self:GetOwner() 
+        if ( not owner:IsValid() ) then return end
+
+        if ( not LocalPlayer() == owner ) then  return end
+
+        hook.Remove("DrawPositions")
+    end
 end
 
 function OnPositionUpdate() 
@@ -119,10 +127,6 @@ function OnUpdateHUD()
         if distance < minDistance then continue end
 
         local displayPos = pos:ToScreen()
-        if not displayPos then
-            print("Display position is nil")
-            continue
-        end
 
         draw.RoundedBox(16,  displayPos.x - 18, displayPos.y - 18, 36, 36, Color(0, 0, 0, 112))
         draw.RoundedBox(16,  displayPos.x - 16, displayPos.y - 16, 32, 32, Color(58, 104, 52, 50))

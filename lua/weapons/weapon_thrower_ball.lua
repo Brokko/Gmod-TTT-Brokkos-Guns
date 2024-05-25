@@ -48,8 +48,7 @@ function SWEP:PrimaryAttack()
 	if (self.Weapon:Clip1() <= 0) then
 		self:EmitSound("Weapon_Pistol.Empty")
 		self:SetNextPrimaryFire(CurTime() + 0.2)
-		self:Reload()
-		return false
+		return 
 	end
 
 	if (CLIENT) then return end

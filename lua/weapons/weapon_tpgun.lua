@@ -53,8 +53,7 @@ function SWEP:PrimaryAttack()
 	if ( self.Weapon:Clip1() <= 0 ) then
 		self:EmitSound( "Weapon_Pistol.Empty" )
 		self:SetNextPrimaryFire( CurTime() + 0.2 )
-		self:Reload()
-		return false
+		return 
 	end
 
    local owner = self:GetOwner()
@@ -121,11 +120,6 @@ function SWEP:SetZoom( state )
          owner:SetFOV( 0, 0.2 )
       end
    end
-end
-
--- Avoid null pointer
-function SWEP:Reload()
-   
 end
 
 if CLIENT then
